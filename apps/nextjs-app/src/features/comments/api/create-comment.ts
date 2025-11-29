@@ -1,9 +1,9 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { z } from 'zod';
 
-import { api } from '@/lib/api-client';
-import { MutationConfig } from '@/lib/react-query';
-import { Comment } from '@/types/api';
+import { api } from '~/lib/api-client';
+import type { MutationConfig } from '~/lib/react-query';
+import { Comment } from '~/types/api';
 
 import { getInfiniteCommentsQueryOptions } from './get-comments';
 

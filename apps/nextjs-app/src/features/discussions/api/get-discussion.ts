@@ -1,8 +1,8 @@
-import { useQuery, queryOptions } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/vue-query';
 
-import { api } from '@/lib/api-client';
-import { QueryConfig } from '@/lib/react-query';
-import { Discussion } from '@/types/api';
+import { api } from '~/lib/api-client';
+import type { QueryConfig } from '~/lib/react-query';
+import { Discussion } from '~/types/api';
 
 export const getDiscussion = ({
   discussionId,
@@ -13,10 +13,10 @@ export const getDiscussion = ({
 };
 
 export const getDiscussionQueryOptions = (discussionId: string) => {
-  return queryOptions({
+  return {
     queryKey: ['discussions', discussionId],
     queryFn: () => getDiscussion({ discussionId }),
-  });
+  };
 };
 
 type UseDiscussionOptions = {

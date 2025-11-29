@@ -1,8 +1,8 @@
-import { infiniteQueryOptions, useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/vue-query';
 
-import { api } from '@/lib/api-client';
-import { QueryConfig } from '@/lib/react-query';
-import { Comment, Meta } from '@/types/api';
+import { api } from '~/lib/api-client';
+import type { QueryConfig } from '~/lib/react-query';
+import { Comment, Meta } from '~/types/api';
 
 export const getComments = ({
   discussionId,
@@ -20,18 +20,18 @@ export const getComments = ({
 };
 
 export const getInfiniteCommentsQueryOptions = (discussionId: string) => {
-  return infiniteQueryOptions({
+  return {
     queryKey: ['comments', discussionId],
-    queryFn: ({ pageParam = 1 }) => {
-      return getComments({ discussionId, page: pageParam as number });
+    queryFn: ({ pageParam = 1 }: { pageParam?: number }) => {
+      return getComments({ discussionId, page: pageParam });
     },
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: { meta: Meta }) => {
       if (lastPage?.meta?.page === lastPage?.meta?.totalPages) return undefined;
       const nextPage = lastPage.meta.page + 1;
       return nextPage;
     },
     initialPageParam: 1,
-  });
+  };
 };
 
 type UseCommentsOptions = {
