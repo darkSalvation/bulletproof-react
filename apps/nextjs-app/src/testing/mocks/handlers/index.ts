@@ -1,6 +1,6 @@
 import { HttpResponse, http } from 'msw';
 
-import { env } from '@/config/env';
+import { env } from '~/config/env';
 
 import { networkDelay } from '../utils';
 

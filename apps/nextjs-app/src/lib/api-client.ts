@@ -1,5 +1,5 @@
-import { useNotifications } from '@/components/ui/notifications';
-import { env } from '@/config/env';
+import { useNotificationsStore } from '~/stores/notifications';
+import { env } from '~/config/env';
 
 type RequestOptions = {
   method?: string;
@@ -8,7 +8,6 @@ type RequestOptions = {
   cookie?: string;
   params?: Record<string, string | number | boolean | undefined | null>;
   cache?: RequestCache;
-  next?: NextFetchRequestConfig;
 };
 
 function buildUrlWithParams(
@@ -28,23 +27,10 @@ function buildUrlWithParams(
   return `${url}?${queryString}`;
 }
 
-// Create a separate function for getting server-side cookies that can be imported where needed
-export function getServerCookies() {
-  if (typeof window !== 'undefined') return '';
-
-  // Dynamic import next/headers only on server-side
-  return import('next/headers').then(({ cookies }) => {
-    try {
-      const cookieStore = cookies();
-      return cookieStore
-        .getAll()
-        .map((c) => `${c.name}=${c.value}`)
-        .join('; ');
-    } catch (error) {
-      console.error('Failed to access cookies:', error);
-      return '';
-    }
-  });
+// Get cookies from document for client-side requests
+export function getClientCookies() {
+  if (typeof window === 'undefined') return '';
+  return document.cookie;
 }
 
 async function fetchApi<T>(
@@ -58,13 +44,12 @@ async function fetchApi<T>(
     cookie,
     params,
     cache = 'no-store',
-    next,
   } = options;
 
-  // Get cookies from the request when running on server
+  // Get cookies from document when running on client
   let cookieHeader = cookie;
-  if (typeof window === 'undefined' && !cookie) {
-    cookieHeader = await getServerCookies();
+  if (typeof window !== 'undefined' && !cookie) {
+    cookieHeader = getClientCookies();
   }
 
   const fullUrl = buildUrlWithParams(`${env.API_URL}${url}`, params);
@@ -80,13 +65,13 @@ async function fetchApi<T>(
     body: body ? JSON.stringify(body) : undefined,
     credentials: 'include',
     cache,
-    next,
   });
 
   if (!response.ok) {
     const message = (await response.json()).message || response.statusText;
     if (typeof window !== 'undefined') {
-      useNotifications.getState().addNotification({
+      const notificationsStore = useNotificationsStore();
+      notificationsStore.addNotification({
         type: 'error',
         title: 'Error',
         message,

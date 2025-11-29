@@ -1,8 +1,8 @@
-import { queryOptions, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/vue-query';
 
-import { api } from '@/lib/api-client';
-import { QueryConfig } from '@/lib/react-query';
-import { Discussion, Meta } from '@/types/api';
+import { api } from '~/lib/api-client';
+import type { QueryConfig } from '~/lib/react-query';
+import { Discussion, Meta } from '~/types/api';
 
 export const getDiscussions = (
   { page }: { page?: number } = { page: 1 },
@@ -20,10 +20,10 @@ export const getDiscussions = (
 export const getDiscussionsQueryOptions = ({
   page = 1,
 }: { page?: number } = {}) => {
-  return queryOptions({
+  return {
     queryKey: ['discussions', { page }],
     queryFn: () => getDiscussions({ page }),
-  });
+  };
 };
 
 type UseDiscussionsOptions = {

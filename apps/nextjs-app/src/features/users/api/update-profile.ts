@@ -1,9 +1,9 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/vue-query';
 import { z } from 'zod';
 
-import { api } from '@/lib/api-client';
-import { useUser } from '@/lib/auth';
-import { MutationConfig } from '@/lib/react-query';
+import { api } from '~/lib/api-client';
+import { useUser } from '~/lib/auth';
+import type { MutationConfig } from '~/lib/react-query';
 
 export const updateProfileInputSchema = z.object({
   email: z.string().min(1, 'Required').email('Invalid email'),

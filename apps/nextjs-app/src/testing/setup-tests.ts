@@ -1,28 +1,10 @@
 import '@testing-library/jest-dom/vitest';
 
-import { initializeDb, resetDb } from '@/testing/mocks/db';
-import { server } from '@/testing/mocks/server';
-
-vi.mock('zustand');
+import { initializeDb, resetDb } from '~/testing/mocks/db';
+import { server } from '~/testing/mocks/server';
 
 beforeAll(() => {
   server.listen({ onUnhandledRequest: 'error' });
-  vi.mock('next/navigation', async () => {
-    const actual = await vi.importActual('next/navigation');
-    return {
-      ...actual,
-      useRouter: () => {
-        return {
-          push: vi.fn(),
-          replace: vi.fn(),
-        };
-      },
-      usePathname: () => '/app',
-      useSearchParams: () => ({
-        get: vi.fn(),
-      }),
-    };
-  });
 });
 afterAll(() => server.close());
 beforeEach(() => {
