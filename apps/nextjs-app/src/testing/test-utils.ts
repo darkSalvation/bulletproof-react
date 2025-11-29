@@ -1,12 +1,6 @@
-import {
-  render as rtlRender,
-  waitForElementToBeRemoved,
-  screen,
-} from '@testing-library/react';
+import { render, screen } from '@testing-library/vue';
 import userEvent from '@testing-library/user-event';
 import Cookies from 'js-cookie';
-
-import { AppProvider } from '@/app/provider';
 
 import {
   createDiscussion as generateDiscussion,
@@ -14,15 +8,6 @@ import {
 } from './data-generators';
 import { db } from './mocks/db';
 import { AUTH_COOKIE, authenticate, hash } from './mocks/utils';
-
-export const waitForLoadingToFinish = () =>
-  waitForElementToBeRemoved(
-    () => [
-      ...screen.queryAllByTestId(/loading/i),
-      ...screen.queryAllByText(/loading/i),
-    ],
-    { timeout: 4000 },
-  );
 
 export const createUser = async (userProperties?: any) => {
   const user = generateUser(userProperties) as any;
@@ -54,15 +39,14 @@ const initializeUser = async (user: any) => {
 };
 
 export const renderApp = async (
-  ui: any,
+  component: any,
   { user, ...renderOptions }: Record<string, any> = {},
 ) => {
   // if you want to render the app unauthenticated then pass "null" as the user
   const initializedUser = await initializeUser(user);
 
   const returnValue = {
-    ...rtlRender(ui, {
-      wrapper: AppProvider,
+    ...render(component, {
       ...renderOptions,
     }),
     user: initializedUser,
@@ -71,5 +55,5 @@ export const renderApp = async (
   return returnValue;
 };
 
-export * from '@testing-library/react';
-export { userEvent, rtlRender };
+export * from '@testing-library/vue';
+export { userEvent, render, screen };
