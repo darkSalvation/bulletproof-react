@@ -1,15 +1,16 @@
-import { cookies } from 'next/headers';
-
 export const AUTH_TOKEN_COOKIE_NAME = 'bulletproof_react_app_token';
 
 export const getAuthTokenCookie = () => {
   if (typeof window !== 'undefined') return '';
-  const cookieStore = cookies();
-  return cookieStore.get(AUTH_TOKEN_COOKIE_NAME)?.value;
+  // In Nuxt, we would use useCookie or get from request headers
+  return '';
 };
 
 export const checkLoggedIn = () => {
-  const cookieStore = cookies();
-  const isLoggedIn = !!cookieStore.get(AUTH_TOKEN_COOKIE_NAME);
+  if (typeof window === 'undefined') return false;
+  const cookies = document.cookie.split(';');
+  const isLoggedIn = cookies.some((cookie) =>
+    cookie.trim().startsWith(`${AUTH_TOKEN_COOKIE_NAME}=`),
+  );
   return isLoggedIn;
 };

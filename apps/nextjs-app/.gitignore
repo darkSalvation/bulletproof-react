@@ -38,6 +38,14 @@ yarn-error.log*
 # local
 mocked-db.json
 
+# Nuxt
+.nuxt
+.output
+.data
+.nitro
+.cache
+
+# Legacy Next.js (can be removed)
 /.next
 /.vite
 tsconfig.tsbuildinfo

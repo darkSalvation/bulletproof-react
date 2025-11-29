@@ -1,4 +1,4 @@
-import { UseMutationOptions, DefaultOptions } from '@tanstack/react-query';
+import type { UseMutationOptions, DefaultOptions } from '@tanstack/vue-query';
 
 export const queryConfig = {
   queries: {

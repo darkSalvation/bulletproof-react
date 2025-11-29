@@ -1,12 +1,11 @@
 import {
-  queryOptions,
-  useMutation,
   useQuery,
+  useMutation,
   useQueryClient,
-} from '@tanstack/react-query';
+} from '@tanstack/vue-query';
 import { z } from 'zod';
 
-import { AuthResponse, User } from '@/types/api';
+import { AuthResponse, User } from '~/types/api';
 
 import { api } from './api-client';
 
@@ -22,10 +21,10 @@ export const getUser = async (): Promise<User> => {
 const userQueryKey = ['user'];
 
 export const getUserQueryOptions = () => {
-  return queryOptions({
+  return {
     queryKey: userQueryKey,
     queryFn: getUser,
-  });
+  };
 };
 
 export const useUser = () => useQuery(getUserQueryOptions());

@@ -1,5 +1,4 @@
 import * as z from 'zod';
-import 'dotenv/config';
 
 const createEnv = () => {
   const EnvSchema = z.object({
@@ -13,11 +12,12 @@ const createEnv = () => {
     APP_MOCK_API_PORT: z.string().optional().default('8080'),
   });
 
+  // For Nuxt, use runtime config instead of process.env
   const envVars = {
-    API_URL: process.env.NEXT_PUBLIC_API_URL,
-    ENABLE_API_MOCKING: process.env.NEXT_PUBLIC_ENABLE_API_MOCKING,
-    APP_URL: process.env.NEXT_PUBLIC_URL,
-    APP_MOCK_API_PORT: process.env.NEXT_PUBLIC_MOCK_API_PORT,
+    API_URL: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:8080/api',
+    ENABLE_API_MOCKING: process.env.NUXT_PUBLIC_ENABLE_API_MOCKING,
+    APP_URL: process.env.NUXT_PUBLIC_URL || 'http://localhost:3000',
+    APP_MOCK_API_PORT: process.env.NUXT_PUBLIC_MOCK_API_PORT || '8080',
   };
 
   const parsedEnv = EnvSchema.safeParse(envVars);
